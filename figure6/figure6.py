@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""论文图6：同图子图代码合并。独立文件，不读取原脚本。缺失处不生成替代图。"""
+"""论文图6"""
 from pathlib import Path
 import os, sys, types, traceback, json
 # 只需修改此处，或设置环境变量 CRC_DATA_DIR / CRC_OUTPUT_DIR。
@@ -27,7 +27,6 @@ def load_source(name, source):
             return node
     tree = ast.fix_missing_locations(Paths().visit(tree))
     exec(compile(tree, name, "exec"), module.__dict__)
-    # 将输出重定向到当前论文图号，候选输入路径保留原有位置。
     for key in ["OUT_DIR", "OUT_ROOT", "OUT", "FIG_DIR", "FIG2_DIR", "FIG3_DIR", "FIG4_DIR", "FIG5_DIR", "FIG34_DIR", "FIG35_DIR", "TABLE_DIR", "ENRICH_DIR"]:
         if key in module.__dict__:
             value = OUT / name / key
@@ -57,7 +56,6 @@ def finish(expected):
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "运行报告.json").write_text(json.dumps({"figure":FIGURE_NAME,"expected_panels":expected,"generated":[x[0] for x in PANELS],"issues":ERRORS},ensure_ascii=False,indent=2),encoding="utf-8")
     if PANELS:
-        # 子图保留原始矢量PDF；汇总版为PNG栅格拼版，不声称与Word手工排版完全相同。
         import matplotlib.pyplot as plt
         from PIL import Image
         import math
