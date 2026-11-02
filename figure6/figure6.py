@@ -11,7 +11,6 @@ ERRORS = []
 PANELS = []
 
 def load_source(name, source):
-    # 各来源脚本使用独立命名空间，防止同名函数、路径变量互相覆盖。
     module = types.ModuleType(name)
     module.__file__ = __file__
     sys.modules[name] = module
