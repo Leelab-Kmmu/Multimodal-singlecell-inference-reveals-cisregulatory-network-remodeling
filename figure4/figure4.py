@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-"""论文图4：同图子图代码合并。独立文件，不读取原脚本。缺失处不生成替代图。"""
+"""论文图4"""
 from pathlib import Path
 import os, sys, types, traceback, json
-# 只需修改此处，或设置环境变量 CRC_DATA_DIR / CRC_OUTPUT_DIR。
 DATA_DIR = Path(os.environ.get("CRC_DATA_DIR", r"E:\毕业设计\bishedata"))
 OUTPUT_ROOT = Path(os.environ.get("CRC_OUTPUT_DIR", r"C:\Users\WangXinyue\Desktop\Wang_CRC_ScientificReports_Clean_Revised_Package (1)\26.10.14\111"))
 FIGURE_NAME = '图4'
@@ -11,7 +10,6 @@ ERRORS = []
 PANELS = []
 
 def load_source(name, source):
-    # 各来源脚本使用独立命名空间，防止同名函数、路径变量互相覆盖。
     module = types.ModuleType(name)
     module.__file__ = __file__
     sys.modules[name] = module
@@ -27,7 +25,6 @@ def load_source(name, source):
             return node
     tree = ast.fix_missing_locations(Paths().visit(tree))
     exec(compile(tree, name, "exec"), module.__dict__)
-    # 将输出重定向到当前论文图号，候选输入路径保留原有位置。
     for key in ["OUT_DIR", "OUT_ROOT", "OUT", "FIG_DIR", "FIG2_DIR", "FIG3_DIR", "FIG4_DIR", "FIG5_DIR", "FIG34_DIR", "FIG35_DIR", "TABLE_DIR", "ENRICH_DIR"]:
         if key in module.__dict__:
             value = OUT / name / key
@@ -73,9 +70,9 @@ def finish(expected):
         fig.savefig(OUT/(stem+'.pdf'),bbox_inches='tight')
         plt.close(fig)
     print('输出目录：',OUT)
-    if ERRORS: print('部分面板未完成，详见运行报告；未用占位图替代。')
+    if ERRORS: print('部分面板未完成')
 
-# 来源：plot_final_results_no_celltype.py
+# 
 SOURCE_network = r'''"""
 Generate final result figures WITHOUT cell-type annotation.
 
